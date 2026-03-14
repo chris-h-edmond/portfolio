@@ -3,15 +3,23 @@ import chris from "../assets/chris1.jpeg";
 import { MeshGradient } from "@paper-design/shaders-react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
-const skillsData = [
-  { name: 'Python', icon: '🐍' },
-  { name: 'Java', icon: '☕' },
-  { name: 'Kotlin', icon: '📱' },
-  { name: 'React', icon: '⚛️' },
-  { name: 'AI/ML', icon: '🤖' },
-  { name: 'TensorFlow', icon: '📈' },
-  { name: 'Android', icon: '🤖' },
-  { name: 'Web Dev', icon: '🕸️' },
+const skillsCategories = [
+  {
+    title: "Languages",
+    items: ["C++", "C", "Python", "Java", "Kotlin", "HTML", "CSS", "JavaScript", "TypeScript"]
+  },
+  {
+    title: "Frameworks",
+    items: ["Jetpack Compose", "Spring Boot", "ReactJS"]
+  },
+  {
+    title: "Tools & Platforms",
+    items: ["Android Studio", "Gemini API", "TensorFlow", "PyTorch", "OpenCV", "Postman", "Git/GitHub/GitLab", "GA4", "Google Colab"]
+  },
+  {
+    title: "Core Skills",
+    items: ["Problem-Solving", "Logical Reasoning", "Leadership", "Effective Planning", "Communication"]
+  }
 ];
 
 const Hero = () => {
@@ -145,24 +153,23 @@ const Hero = () => {
 
             {/* 3. Skills overlay layout layer (visible late). Overlays entire card */}
             <motion.div 
-               className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-[#ffffff03] z-20 backdrop-blur-sm"
+               className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-[#00000040] z-20 backdrop-blur-md"
                style={{ opacity: skillsOpacity, y: skillsY, pointerEvents: skillsPointerEvents }}
             >
-               <h2 className="text-3xl font-bold text-white mb-8">Specializations & Skills</h2>
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
-                 {skillsData.map(s => (
-                   <div key={s.name} className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors shadow-lg">
-                     <span className="text-2xl">{s.icon}</span>
-                     <span className="text-base font-medium text-white/90">{s.name}</span>
+               <h2 className="text-3xl font-bold text-white mb-6">Technical Stack & Skills</h2>
+               <div className="flex flex-col gap-6 w-full max-w-4xl max-h-[85%] overflow-y-auto pr-2" style={{ scrollbarWidth: 'none' }}>
+                 {skillsCategories.map(category => (
+                   <div key={category.title} className="flex flex-col gap-3">
+                     <h3 className="text-lg font-semibold text-white/80 border-b border-white/10 pb-2">{category.title}</h3>
+                     <div className="flex flex-wrap gap-2">
+                       {category.items.map(item => (
+                         <span key={item} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm font-medium text-white/90 hover:bg-white/10 hover:border-orange-500 transition-colors shadow-sm">
+                           {item}
+                         </span>
+                       ))}
+                     </div>
                    </div>
                  ))}
-               </div>
-               <div className="mt-8 pt-6 border-t border-white/10 w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-4">
-                 <div className="flex items-center gap-3">
-                    <span className="text-white/60 text-sm uppercase tracking-wider font-semibold">Languages</span>
-                    <span className="px-4 py-1.5 rounded-full bg-white/5 text-sm text-white/90 border border-white/10">English (Native)</span>
-                    <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 text-sm text-emerald-400 border border-emerald-500/20">German (Fluent)</span>
-                 </div>
                </div>
             </motion.div>
 
