@@ -1,11 +1,14 @@
 import React from 'react';
 import { Briefcase, Code } from 'lucide-react';
+import FallingBeams from './FallingBeams';
 
 const Experience = () => {
   return (
-    <section className="section container" id="experience">
-      <h2 className="section-title">Experience</h2>
-      <div className="experience-timeline">
+    <section className="section relative overflow-hidden" id="experience">
+      <FallingBeams />
+      <div className="container relative z-10">
+        <h2 className="section-title">Experience</h2>
+        <div className="experience-timeline">
 
         <div className="timeline-item">
           <div className="timeline-icon">
@@ -74,6 +77,7 @@ const Experience = () => {
           </div>
         </div>
 
+        </div>
       </div>
     </section>
   );
