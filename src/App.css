@@ -218,12 +218,19 @@
   width: 28px;
   height: 28px;
   background-color: var(--bg-primary);
-  border: 2px solid var(--color-accent);
+  border: 2px solid #555;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-accent);
+  color: #555;
+  transition: all 0.3s ease;
+}
+
+.timeline-item:hover .timeline-icon {
+  border-color: #f97316;
+  color: #f97316;
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
 }
 
 .timeline-icon svg {
@@ -232,16 +239,48 @@
 }
 
 .timeline-content {
-  background-color: var(--bg-card);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05); /* Subtle default border color shown in the 1.5px margin */
   padding: 1.5rem 2rem;
   border-radius: var(--radius-global);
   box-shadow: var(--shadow-soft);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
-.timeline-content:hover {
+.timeline-content::after {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  background-color: var(--bg-card);
+  border-radius: calc(var(--radius-global) - 1.5px);
+  z-index: -1;
+}
+
+.timeline-content::before {
+  content: "";
+  position: absolute;
+  inset: -100%; /* Large enough to rotate safely */
+  background: conic-gradient(from 0deg, transparent 75%, #f97316 100%);
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.timeline-item:hover .timeline-content {
   transform: translateY(-5px);
   box-shadow: var(--shadow-hover);
+}
+
+.timeline-item:hover .timeline-content::before {
+  opacity: 1;
+  animation: borderAnim 3s linear infinite;
+}
+
+@keyframes borderAnim {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .timeline-content h3 {
