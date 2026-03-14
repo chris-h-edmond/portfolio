@@ -105,7 +105,7 @@ const Hero = () => {
   return (
     <section ref={containerRef} className="relative h-[200vh] w-full" id="home">
       {/* Sticky container that locks during scroll */}
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden pt-10">
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden pb-20">
         
         {/* Shaders and lights inside sticky container */}
         <div className="absolute inset-0 -z-10 w-full h-full pointer-events-none bg-black">
