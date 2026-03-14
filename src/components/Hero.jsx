@@ -99,8 +99,6 @@ const Hero = () => {
   const imgWidth = useTransform(scrollYProgress, [0, 1], [bounds?.stW || 0, bounds?.enSize || 0]);
   const imgHeight = useTransform(scrollYProgress, [0, 1], [bounds?.stH || 0, bounds?.enSize || 0]);
   const imgRadius = useTransform(scrollYProgress, [0, 1], ["16px", "50%"]);
-  // Use a string interpolation for filter so format strictly matches
-  const imgFilter = useTransform(scrollYProgress, [0, 1], ["blur(1.5px) brightness(0.9) saturate(0.85) contrast(1.25)", "blur(0px) brightness(1) saturate(1) contrast(1)"]);
 
   return (
     <section ref={containerRef} className="relative h-[200vh] w-full" id="home">
@@ -149,7 +147,6 @@ const Hero = () => {
                  className="hero-image"
                  style={{ 
                    opacity: bounds ? placeOpacity : 1,
-                   filter: "blur(1.5px) brightness(0.9) saturate(0.85) contrast(1.25)",
                    pointerEvents: "none"
                  }}
               />
@@ -192,7 +189,6 @@ const Hero = () => {
                width: imgWidth,
                height: imgHeight,
                borderRadius: imgRadius,
-               filter: imgFilter,
                opacity: fixedOpacity,
                pointerEvents: 'none',
                objectFit: 'cover'
