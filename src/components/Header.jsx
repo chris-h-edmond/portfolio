@@ -17,8 +17,10 @@ const Header = () => {
   return (
     <header className="site-header">
       <div className="container header-container">
-        <div className="logo">
-          <strong>CHE</strong>
+        <div className="logo relative">
+          <div id="header-profile-circle" className="w-[44px] h-[44px] rounded-full overflow-hidden flex items-center justify-center bg-transparent border border-white/10 relative transition-all duration-300">
+            <strong className="text-sm z-10 text-white font-bold transition-opacity duration-300" id="header-logo-text">CHE</strong>
+          </div>
         </div>
         <div className="social-icons">
           <a href="https://www.linkedin.com/in/chrisharrisedmond/?skipRedirect=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={22} /></a>

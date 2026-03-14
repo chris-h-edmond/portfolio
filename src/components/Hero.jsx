@@ -1,62 +1,192 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import chris from "../assets/chris1.jpeg";
 import { MeshGradient } from "@paper-design/shaders-react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+
+const skillsData = [
+  { name: 'Python', icon: '🐍' },
+  { name: 'Java', icon: '☕' },
+  { name: 'Kotlin', icon: '📱' },
+  { name: 'React', icon: '⚛️' },
+  { name: 'AI/ML', icon: '🤖' },
+  { name: 'TensorFlow', icon: '📈' },
+  { name: 'Android', icon: '🤖' },
+  { name: 'Web Dev', icon: '🕸️' },
+];
 
 const Hero = () => {
   const [speed] = useState(1.0);
+  const containerRef = useRef(null);
+  const placeholderRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100, damping: 30, restDelta: 0.001
+  });
+
+  // Fade out left text
+  const leftOpacity = useTransform(smoothProgress, [0, 0.4], [1, 0]);
+  const leftX = useTransform(smoothProgress, [0, 0.4], [0, -50]);
+
+  // Fade in skills grid
+  const skillsOpacity = useTransform(smoothProgress, [0.4, 0.8], [0, 1]);
+  const skillsY = useTransform(smoothProgress, [0.4, 0.8], [40, 0]);
+  const skillsPointerEvents = useTransform(smoothProgress, p => p > 0.5 ? 'auto' : 'none');
+
+  const [bounds, setBounds] = useState(null);
+
+  useEffect(() => {
+    const measure = () => {
+      const ph = placeholderRef.current;
+      if (!ph) return;
+      const rect = ph.getBoundingClientRect();
+      
+      let targetLeft = 24;
+      let targetTop = 24;
+      let targetSize = 44;
+      
+      const headerLogo = document.getElementById("header-profile-circle");
+      if (headerLogo) {
+        const lRect = headerLogo.getBoundingClientRect();
+        targetLeft = lRect.left;
+        targetTop = lRect.top;
+        targetSize = lRect.width;
+      } else {
+        targetLeft = Math.max(24, window.innerWidth / 2 - 600 + 24);
+      }
+
+      setBounds({
+        stTop: rect.top, stLeft: rect.left, stW: rect.width, stH: rect.height,
+        enTop: targetTop, enLeft: targetLeft, enSize: targetSize
+      });
+    };
+    
+    // Slight delay for font/layout paints
+    const tm = setTimeout(measure, 100);
+    window.addEventListener('resize', measure);
+    return () => { clearTimeout(tm); window.removeEventListener('resize', measure); };
+  }, []);
+
+  // Use progress to fade out header initial text
+  useEffect(() => {
+     const unsubscribe = smoothProgress.on('change', (v) => {
+        const txt = document.getElementById("header-logo-text");
+        if (txt) {
+           txt.style.opacity = v > 0.9 ? 0 : 1;
+        }
+     });
+     return () => unsubscribe();
+  }, [smoothProgress]);
+
+  const imgTop = useTransform(smoothProgress, [0, 1], [bounds?.stTop || 0, bounds?.enTop || 0]);
+  const imgLeft = useTransform(smoothProgress, [0, 1], [bounds?.stLeft || 0, bounds?.enLeft || 0]);
+  const imgWidth = useTransform(smoothProgress, [0, 1], [bounds?.stW || 0, bounds?.enSize || 0]);
+  const imgHeight = useTransform(smoothProgress, [0, 1], [bounds?.stH || 0, bounds?.enSize || 0]);
+  const imgRadius = useTransform(smoothProgress, [0, 1], ["16px", "50%"]);
+  // Use a string interpolation for filter so format strictly matches
+  const imgFilter = useTransform(smoothProgress, [0, 1], ["blur(1.5px) brightness(0.9) saturate(0.85) contrast(1.25)", "blur(0px) brightness(1) saturate(1) contrast(1)"]);
 
   return (
-    <section className="relative min-h-[calc(100vh-100px)] flex items-center w-full py-16" id="home">
-      <div className="absolute inset-0 -z-10 w-[100vw] h-full left-[50%] -translate-x-[50%] overflow-hidden pointer-events-none bg-black">
-         <MeshGradient
-          className="w-full h-full absolute inset-0 mix-blend-screen opacity-80"
-          colors={["#111111", "#5c3317", "#1e2a38", "#2a1810"]}
-          speed={speed * 0.8}
-          wireframe={false}
-          backgroundColor="#000000"
-        />
+    <section ref={containerRef} className="relative h-[200vh] w-full" id="home">
+      {/* Sticky container that locks during scroll */}
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden pt-10">
         
-        {/* Lighting overlay effects */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-1/4 left-1/3 w-32 h-32 bg-gray-800/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: `${3 / speed}s` }}
+        {/* Shaders and lights inside sticky container */}
+        <div className="absolute inset-0 -z-10 w-full h-full pointer-events-none bg-black">
+          <MeshGradient
+            className="w-full h-full absolute inset-0 mix-blend-screen opacity-80"
+            colors={["#111111", "#5c3317", "#1e2a38", "#2a1810"]}
+            speed={speed * 0.8}
+            wireframe={false}
+            backgroundColor="#000000"
           />
-          <div
-            className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-white/5 rounded-full blur-2xl animate-pulse"
-            style={{ animationDuration: `${2 / speed}s`, animationDelay: "1s" }}
-          />
-          <div
-            className="absolute top-1/2 right-1/3 w-20 h-20 bg-gray-900/10 rounded-full blur-xl animate-pulse"
-            style={{ animationDuration: `${4 / speed}s`, animationDelay: "0.5s" }}
-          />
-        </div>
-      </div>
-      
-      <div className="hero-section container relative z-10 bg-[#ffffff08] backdrop-blur-[40px] border border-white/10 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.05),0_0_40px_rgba(255,255,255,0.05)] overflow-hidden">
-        <div className="hero-content">
-          <h1 className="tracking-tight drop-shadow-lg">Chris Harris Edmond</h1>
-          <p className="hero-subtitle">
-            Student Developer specializing in AI, Machine Learning, Web and Android Development.
-          </p>
-          <div className="hero-buttons">
-            <a href="#projects" className="btn btn-primary">View My Work</a>
-            <a href="https://drive.google.com/drive/folders/1qVMl65xTtMjz2yre3JZRjq-tm74qEu5r?usp=sharing" className="btn btn-secondary" target="_blank" rel="noopener noreferrer">Resume</a>
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/4 left-1/3 w-32 h-32 bg-gray-800/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: `${3 / speed}s` }} />
+            <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-white/5 rounded-full blur-2xl animate-pulse" style={{ animationDuration: `${2 / speed}s`, animationDelay: "1s" }} />
+            <div className="absolute top-1/2 right-1/3 w-20 h-20 bg-gray-900/10 rounded-full blur-xl animate-pulse" style={{ animationDuration: `${4 / speed}s`, animationDelay: "0.5s" }} />
           </div>
         </div>
-        <div className="hero-image-wrapper relative z-10">
-          <img
-            src={chris}
-            alt="Chris Harris Edmond - Student Developer"
-            className="hero-image blur-[1.5px] scale-[1.02] brightness-90 saturate-[0.85] contrast-125"
-            onError={(e) => {
-              e.target.onerror = null;
-              // Fallback to a placeholder if image missing
-              e.target.src = 'https://png.pngtree.com/png-vector/20250512/ourmid/pngtree-default-avatar-profile-icon-gray-placeholder-vector-png-image_16213764.png';
-            }}
-          />
+
+        {/* Hero Card */}
+        <div className="container relative z-10 w-full">
+          {/* We apply hero-section exactly on the glass card like the original layout */}
+          <div className="hero-section relative bg-[#ffffff08] backdrop-blur-[40px] border border-white/10 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.05),0_0_40px_rgba(255,255,255,0.05)] overflow-hidden min-h-[550px]">
+            
+            {/* 1. Left Text Column */}
+            <motion.div className="hero-content" style={{ opacity: leftOpacity, x: leftX }}>
+              <h1 className="tracking-tight drop-shadow-lg">Chris Harris Edmond</h1>
+              <p className="hero-subtitle">
+                Student Developer specializing in AI, Machine Learning, Web and Android Development.
+              </p>
+              <div className="hero-buttons">
+                <a href="#projects" className="btn btn-primary">View My Work</a>
+                <a href="https://drive.google.com/drive/folders/1qVMl65xTtMjz2yre3JZRjq-tm74qEu5r?usp=sharing" className="btn btn-secondary" target="_blank" rel="noopener noreferrer">Resume</a>
+              </div>
+            </motion.div>
+
+            {/* 2. Right Image Column */}
+            <div className="hero-image-wrapper relative z-10">
+              <img
+                 ref={placeholderRef}
+                 src={chris}
+                 alt="Chris Harris Edmond - Student Developer"
+                 className="hero-image scale-[1.02]"
+                 style={{ 
+                   opacity: bounds ? 0 : 1,
+                   filter: "blur(1.5px) brightness(0.9) saturate(0.85) contrast(1.25)",
+                   pointerEvents: "none"
+                 }}
+              />
+            </div>
+
+            {/* 3. Skills overlay layout layer (visible late). Overlays entire card */}
+            <motion.div 
+               className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-[#ffffff03] z-20 backdrop-blur-sm"
+               style={{ opacity: skillsOpacity, y: skillsY, pointerEvents: skillsPointerEvents }}
+            >
+               <h2 className="text-3xl font-bold text-white mb-8">Specializations & Skills</h2>
+               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
+                 {skillsData.map(s => (
+                   <div key={s.name} className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors shadow-lg">
+                     <span className="text-2xl">{s.icon}</span>
+                     <span className="text-base font-medium text-white/90">{s.name}</span>
+                   </div>
+                 ))}
+               </div>
+               <div className="mt-8 pt-6 border-t border-white/10 w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-4">
+                 <div className="flex items-center gap-3">
+                    <span className="text-white/60 text-sm uppercase tracking-wider font-semibold">Languages</span>
+                    <span className="px-4 py-1.5 rounded-full bg-white/5 text-sm text-white/90 border border-white/10">English (Native)</span>
+                    <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 text-sm text-emerald-400 border border-emerald-500/20">German (Fluent)</span>
+                 </div>
+               </div>
+            </motion.div>
+
+          </div>
         </div>
       </div>
+
+      {/* The Animated Fixed Image, detached from normal flow to allow overlapping the header safely. */}
+      {bounds && (
+         <motion.img
+            src={chris}
+            className="fixed z-[1001] shadow-2xl scale-[1.02]"
+            style={{
+               top: imgTop,
+               left: imgLeft,
+               width: imgWidth,
+               height: imgHeight,
+               borderRadius: imgRadius,
+               filter: imgFilter,
+               pointerEvents: 'none',
+               objectFit: 'cover'
+            }}
+         />
+      )}
     </section>
   );
 };
