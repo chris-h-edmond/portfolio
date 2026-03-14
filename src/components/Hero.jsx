@@ -33,13 +33,13 @@ const Hero = () => {
   });
 
   // Fade out left text
-  const leftOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-  const leftX = useTransform(scrollYProgress, [0, 0.4], [0, -50]);
+  const leftOpacity = useTransform(scrollYProgress, [0, 0.33], [1, 0]);
+  const leftX = useTransform(scrollYProgress, [0, 0.33], [0, -50]);
 
   // Fade in skills grid
-  const skillsOpacity = useTransform(scrollYProgress, [0.4, 0.8], [0, 1]);
-  const skillsY = useTransform(scrollYProgress, [0.4, 0.8], [40, 0]);
-  const skillsPointerEvents = useTransform(scrollYProgress, p => p > 0.5 ? 'auto' : 'none');
+  const skillsOpacity = useTransform(scrollYProgress, [0.33, 0.66], [0, 1]);
+  const skillsY = useTransform(scrollYProgress, [0.33, 0.66], [40, 0]);
+  const skillsPointerEvents = useTransform(scrollYProgress, p => p > 0.45 ? 'auto' : 'none');
 
   const [bounds, setBounds] = useState(null);
 
@@ -84,7 +84,7 @@ const Hero = () => {
      const unsubscribe = scrollYProgress.on('change', (v) => {
         const txt = document.getElementById("header-logo-text");
         if (txt) {
-           txt.style.opacity = v > 0.9 ? 0 : 1;
+           txt.style.opacity = v > 0.6 ? 0 : 1;
         }
      });
      return () => unsubscribe();
@@ -94,14 +94,14 @@ const Hero = () => {
   const placeOpacity = useTransform(scrollYProgress, [0, 0.001], [1, 0]);
   const fixedOpacity = useTransform(scrollYProgress, [0, 0.001], [0, 1]);
 
-  const imgTop = useTransform(scrollYProgress, [0, 1], [bounds?.stTop || 0, bounds?.enTop || 0]);
-  const imgLeft = useTransform(scrollYProgress, [0, 1], [bounds?.stLeft || 0, bounds?.enLeft || 0]);
-  const imgWidth = useTransform(scrollYProgress, [0, 1], [bounds?.stW || 0, bounds?.enSize || 0]);
-  const imgHeight = useTransform(scrollYProgress, [0, 1], [bounds?.stH || 0, bounds?.enSize || 0]);
-  const imgRadius = useTransform(scrollYProgress, [0, 1], ["16px", "50%"]);
+  const imgTop = useTransform(scrollYProgress, [0, 0.66], [bounds?.stTop || 0, bounds?.enTop || 0]);
+  const imgLeft = useTransform(scrollYProgress, [0, 0.66], [bounds?.stLeft || 0, bounds?.enLeft || 0]);
+  const imgWidth = useTransform(scrollYProgress, [0, 0.66], [bounds?.stW || 0, bounds?.enSize || 0]);
+  const imgHeight = useTransform(scrollYProgress, [0, 0.66], [bounds?.stH || 0, bounds?.enSize || 0]);
+  const imgRadius = useTransform(scrollYProgress, [0, 0.66], ["16px", "50%"]);
 
   return (
-    <section ref={containerRef} className="relative h-[200vh] w-full" id="home">
+    <section ref={containerRef} className="relative h-[220vh] w-full" id="home">
       {/* Sticky container that locks during scroll */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden pb-20">
         
