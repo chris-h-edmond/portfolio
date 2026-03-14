@@ -23,13 +23,12 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: rgba(253, 249, 243, 0.85);
-  /* Transparent Cream */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(79, 100, 111, 0.05);
-  box-shadow: 0 4px 12px rgba(79, 100, 111, 0.05);
-  /* Minimal shadow */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Heavily blurred seamless glass */
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
 .header-container {
@@ -65,12 +64,11 @@
 
 /* ----------------------- HERO ----------------------- */
 .hero-section {
-  min-height: calc(100vh - 100px);
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 4rem;
-  padding: 4rem 0;
+  padding: 4rem;
 }
 
 .hero-content h1 {
@@ -144,17 +142,7 @@
   align-items: center;
 }
 
-.hero-bg-shape {
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  right: -5%;
-  bottom: -5%;
-  background-color: rgba(238, 99, 82, 0.1);
-  /* Subtle coral offset */
-  border-radius: var(--radius-global);
-  z-index: 1;
-}
+
 
 .hero-image {
   position: relative;
