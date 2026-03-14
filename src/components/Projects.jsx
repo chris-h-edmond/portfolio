@@ -1,4 +1,5 @@
 import React from 'react';
+import FlyingDots from './FlyingDots';
 
 const PROJECTS_DATA = [
   {
@@ -29,11 +30,13 @@ const PROJECTS_DATA = [
 
 const Projects = () => {
   return (
-    <section className="section container" id="projects">
-      <h2 className="section-title">Projects</h2>
+    <section className="section relative overflow-hidden" id="projects">
+      <FlyingDots />
+      <div className="container relative z-10">
+        <h2 className="section-title">Projects</h2>
 
-      <div className="projects-grid">
-        {PROJECTS_DATA.map((project, index) => (
+        <div className="projects-grid">
+          {PROJECTS_DATA.map((project, index) => (
           <article className="project-card flex flex-col" key={index}>
             <img
               src={project.image}
@@ -71,6 +74,7 @@ const Projects = () => {
             </div>
           </article>
         ))}
+        </div>
       </div>
     </section>
   );
