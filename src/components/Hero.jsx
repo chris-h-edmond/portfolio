@@ -32,27 +32,27 @@ const Hero = () => {
     offset: ["start start", "end end"]
   });
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100, damping: 30, restDelta: 0.001
-  });
-
   // Fade out left text
-  const leftOpacity = useTransform(smoothProgress, [0, 0.4], [1, 0]);
-  const leftX = useTransform(smoothProgress, [0, 0.4], [0, -50]);
+  const leftOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  const leftX = useTransform(scrollYProgress, [0, 0.4], [0, -50]);
 
   // Fade in skills grid
-  const skillsOpacity = useTransform(smoothProgress, [0.4, 0.8], [0, 1]);
-  const skillsY = useTransform(smoothProgress, [0.4, 0.8], [40, 0]);
-  const skillsPointerEvents = useTransform(smoothProgress, p => p > 0.5 ? 'auto' : 'none');
+  const skillsOpacity = useTransform(scrollYProgress, [0.4, 0.8], [0, 1]);
+  const skillsY = useTransform(scrollYProgress, [0.4, 0.8], [40, 0]);
+  const skillsPointerEvents = useTransform(scrollYProgress, p => p > 0.5 ? 'auto' : 'none');
 
   const [bounds, setBounds] = useState(null);
 
   useEffect(() => {
     const measure = () => {
       const ph = placeholderRef.current;
-      if (!ph) return;
+      if (!ph || !containerRef.current) return;
       const rect = ph.getBoundingClientRect();
+      const containerRect = containerRef.current.getBoundingClientRect();
       
+      // Calculate true viewport top position as if the container has exactly stuck to top:0
+      const simulatedStTop = rect.top - containerRect.top;
+
       let targetLeft = 24;
       let targetTop = 24;
       let targetSize = 44;
@@ -68,7 +68,7 @@ const Hero = () => {
       }
 
       setBounds({
-        stTop: rect.top, stLeft: rect.left, stW: rect.width, stH: rect.height,
+        stTop: simulatedStTop, stLeft: rect.left, stW: rect.width, stH: rect.height,
         enTop: targetTop, enLeft: targetLeft, enSize: targetSize
       });
     };
@@ -81,22 +81,26 @@ const Hero = () => {
 
   // Use progress to fade out header initial text
   useEffect(() => {
-     const unsubscribe = smoothProgress.on('change', (v) => {
+     const unsubscribe = scrollYProgress.on('change', (v) => {
         const txt = document.getElementById("header-logo-text");
         if (txt) {
            txt.style.opacity = v > 0.9 ? 0 : 1;
         }
      });
      return () => unsubscribe();
-  }, [smoothProgress]);
+  }, [scrollYProgress]);
 
-  const imgTop = useTransform(smoothProgress, [0, 1], [bounds?.stTop || 0, bounds?.enTop || 0]);
-  const imgLeft = useTransform(smoothProgress, [0, 1], [bounds?.stLeft || 0, bounds?.enLeft || 0]);
-  const imgWidth = useTransform(smoothProgress, [0, 1], [bounds?.stW || 0, bounds?.enSize || 0]);
-  const imgHeight = useTransform(smoothProgress, [0, 1], [bounds?.stH || 0, bounds?.enSize || 0]);
-  const imgRadius = useTransform(smoothProgress, [0, 1], ["16px", "50%"]);
+  // Instantly cross-fade placeholder and animated image exactly when scroll reaches the sticky point
+  const placeOpacity = useTransform(scrollYProgress, [0, 0.001], [1, 0]);
+  const fixedOpacity = useTransform(scrollYProgress, [0, 0.001], [0, 1]);
+
+  const imgTop = useTransform(scrollYProgress, [0, 1], [bounds?.stTop || 0, bounds?.enTop || 0]);
+  const imgLeft = useTransform(scrollYProgress, [0, 1], [bounds?.stLeft || 0, bounds?.enLeft || 0]);
+  const imgWidth = useTransform(scrollYProgress, [0, 1], [bounds?.stW || 0, bounds?.enSize || 0]);
+  const imgHeight = useTransform(scrollYProgress, [0, 1], [bounds?.stH || 0, bounds?.enSize || 0]);
+  const imgRadius = useTransform(scrollYProgress, [0, 1], ["16px", "50%"]);
   // Use a string interpolation for filter so format strictly matches
-  const imgFilter = useTransform(smoothProgress, [0, 1], ["blur(1.5px) brightness(0.9) saturate(0.85) contrast(1.25)", "blur(0px) brightness(1) saturate(1) contrast(1)"]);
+  const imgFilter = useTransform(scrollYProgress, [0, 1], ["blur(1.5px) brightness(0.9) saturate(0.85) contrast(1.25)", "blur(0px) brightness(1) saturate(1) contrast(1)"]);
 
   return (
     <section ref={containerRef} className="relative h-[200vh] w-full" id="home">
@@ -138,13 +142,13 @@ const Hero = () => {
 
             {/* 2. Right Image Column */}
             <div className="hero-image-wrapper relative z-10">
-              <img
+              <motion.img
                  ref={placeholderRef}
                  src={chris}
                  alt="Chris Harris Edmond - Student Developer"
-                 className="hero-image scale-[1.02]"
+                 className="hero-image"
                  style={{ 
-                   opacity: bounds ? 0 : 1,
+                   opacity: bounds ? placeOpacity : 1,
                    filter: "blur(1.5px) brightness(0.9) saturate(0.85) contrast(1.25)",
                    pointerEvents: "none"
                  }}
@@ -181,7 +185,7 @@ const Hero = () => {
       {bounds && (
          <motion.img
             src={chris}
-            className="fixed z-[1001] shadow-2xl scale-[1.02]"
+            className="fixed z-[1001] shadow-2xl"
             style={{
                top: imgTop,
                left: imgLeft,
@@ -189,6 +193,7 @@ const Hero = () => {
                height: imgHeight,
                borderRadius: imgRadius,
                filter: imgFilter,
+               opacity: fixedOpacity,
                pointerEvents: 'none',
                objectFit: 'cover'
             }}
