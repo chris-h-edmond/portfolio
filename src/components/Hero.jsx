@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import chris from "../assets/chris-official-2.jpg";
+import chris from "../assets/chris--2.jpg";
 import { MeshGradient } from "@paper-design/shaders-react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
