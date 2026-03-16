@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, User, Folder, Mail } from 'lucide-react';
+import { Home, User, Folder, Award, Mail } from 'lucide-react';
 
 const Sidebar = () => {
   return (
@@ -15,6 +15,10 @@ const Sidebar = () => {
       <a href="#projects" className="nav-link" aria-label="Projects">
         <span className="nav-icon"><Folder size={24} /></span>
         <span className="nav-label">Projects</span>
+      </a>
+      <a href="#certificates" className="nav-link" aria-label="Certificates">
+        <span className="nav-icon"><Award size={24} /></span>
+        <span className="nav-label">Certificates</span>
       </a>
       <a href="#contact" className="nav-link" aria-label="Contact">
         <span className="nav-icon"><Mail size={24} /></span>
