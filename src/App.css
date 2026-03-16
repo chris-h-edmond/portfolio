@@ -767,51 +767,110 @@ textarea.form-input {
   z-index: 100;
   display: flex;
   flex-direction: column;
-  background: var(--bg-nav);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  /* Dark glassmorphism core */
+  background: linear-gradient(
+    160deg,
+    rgba(18, 18, 18, 0.82) 0%,
+    rgba(10, 10, 10, 0.92) 100%
+  );
+  backdrop-filter: blur(32px) saturate(160%);
+  -webkit-backdrop-filter: blur(32px) saturate(160%);
+
+  /* Layered shadows: depth + inner highlight + faint accent glow */
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.7),
+    0 4px 16px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  /* Top-edge highlight hairline as border */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top-color: rgba(255, 255, 255, 0.13);
+
   border-radius: var(--radius-global);
-  padding: 1rem 0;
-  box-shadow: var(--shadow-strong);
+  padding: 0.75rem 0;
   overflow: hidden;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s ease;
   width: 64px;
-  /* Default width (icons only) */
+}
+
+/* Subtle glass sheen overlay */
+.sticky-sidebar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .sticky-sidebar:hover {
-  width: 160px;
-  /* Expanded width */
+  width: 168px;
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.75),
+    0 6px 20px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
 .nav-link {
   display: flex;
   align-items: center;
-  padding: 1rem;
-  color: var(--text-primary);
+  padding: 0.9rem 1rem;
+  color: rgba(163, 163, 163, 0.7);
   text-decoration: none;
   position: relative;
   transition: all var(--transition-fast);
   white-space: nowrap;
 }
 
+/* Glowing left bar indicator on hover/active */
+.nav-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 60%;
+  background: #f97316;
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.6);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+  opacity: 0;
+}
+
+.nav-link:hover::before,
+.nav-link.active::before {
+  transform: translateY(-50%) scaleY(1);
+  opacity: 1;
+}
+
 .nav-icon {
   width: 32px;
-  /* Fixed width to keep icons centered when collapsed */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  transition: color var(--transition-fast);
 }
 
 .nav-label {
   opacity: 0;
-  transform: translateX(10px);
-  transition: opacity 0.3s, transform 0.3s;
+  transform: translateX(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
   font-weight: 500;
-  font-size: 0.95rem;
-  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  margin-left: 0.6rem;
+  letter-spacing: 0.01em;
 }
 
 .sticky-sidebar:hover .nav-label {
@@ -821,23 +880,38 @@ textarea.form-input {
 
 .nav-link:hover,
 .nav-link.active {
-  color: var(--color-accent);
-  background-color: rgba(238, 99, 82, 0.05);
-  /* Subtle hover bg */
+  color: #ffffff;
+  background: rgba(249, 115, 22, 0.08);
+}
+
+.nav-link:hover .nav-icon,
+.nav-link.active .nav-icon {
+  color: #f97316;
+  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.5));
+}
+
+/* Divider between link groups */
+.nav-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0.4rem 1rem;
 }
 
 @media (max-width: 768px) {
   .sticky-sidebar {
     top: auto;
-    bottom: 1.5rem;
+    bottom: 1.25rem;
     left: 50%;
     transform: translateX(-50%);
     right: auto;
     flex-direction: row;
-    width: auto;
+    width: auto !important;
     border-radius: 999px;
-    /* Pill shaped bottom nav */
-    padding: 0 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .sticky-sidebar::before {
+    border-radius: 999px;
   }
 
   .sticky-sidebar:hover {
@@ -845,12 +919,17 @@ textarea.form-input {
   }
 
   .nav-link {
-    padding: 1rem 1.25rem;
+    padding: 0.85rem 1.1rem;
+    margin: 0 2px;
+    border-radius: 999px;
+  }
+
+  .nav-link::before {
+    display: none;
   }
 
   .nav-label {
     display: none;
-    /* Hide labels completely on mobile */
   }
 
   .nav-icon {
