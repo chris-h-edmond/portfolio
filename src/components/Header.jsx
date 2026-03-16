@@ -1,5 +1,5 @@
-import React from 'react';
-import { Linkedin, Github, Share2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Linkedin, Github, Share2, Check } from 'lucide-react';
 
 const LeetCodeIcon = ({ size }) => (
   <svg
@@ -13,23 +13,60 @@ const LeetCodeIcon = ({ size }) => (
   </svg>
 );
 
+// Toast component rendered at root level via portal-like fixed positioning
+const Toast = ({ visible }) => (
+  <div className={`share-toast ${visible ? 'share-toast--visible' : ''}`}>
+    <span className="share-toast__icon">
+      <Check size={15} strokeWidth={3} />
+    </span>
+    Site URL copied!
+  </div>
+);
+
 const Header = () => {
+  const [toastVisible, setToastVisible] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = (e) => {
+    e.preventDefault();
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setToastVisible(true);
+
+      // Hide toast after 2.8s
+      setTimeout(() => setToastVisible(false), 2800);
+      // Reset icon after toast fades out
+      setTimeout(() => setCopied(false), 3200);
+    });
+  };
+
   return (
-    <header className="site-header">
-      <div className="container header-container">
-        <div className="logo relative">
-          <div id="header-profile-circle" className="w-[44px] h-[44px] rounded-full overflow-hidden flex items-center justify-center bg-transparent border border-white/10 relative transition-all duration-300">
-            <strong className="text-sm z-10 text-white font-bold transition-opacity duration-300" id="header-logo-text">CHE</strong>
+    <>
+      <header className="site-header">
+        <div className="container header-container">
+          <div className="logo relative">
+            <div id="header-profile-circle" className="w-[44px] h-[44px] rounded-full overflow-hidden flex items-center justify-center bg-transparent border border-white/10 relative transition-all duration-300">
+              <strong className="text-sm z-10 text-white font-bold transition-opacity duration-300" id="header-logo-text">CHE</strong>
+            </div>
+          </div>
+          <div className="social-icons">
+            <a href="https://www.linkedin.com/in/chrisharrisedmond/?skipRedirect=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={22} /></a>
+            <a href="https://github.com/chris-h-edmond" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github size={22} /></a>
+            <a href="https://leetcode.com/u/chris-h-edmond/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode"><LeetCodeIcon size={22} /></a>
+            <a
+              href="#"
+              aria-label="Share"
+              className={copied ? 'share-btn--copied' : ''}
+              onClick={handleShare}
+            >
+              {copied ? <Check size={22} strokeWidth={2.5} /> : <Share2 size={22} />}
+            </a>
           </div>
         </div>
-        <div className="social-icons">
-          <a href="https://www.linkedin.com/in/chrisharrisedmond/?skipRedirect=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={22} /></a>
-          <a href="https://github.com/chris-h-edmond" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github size={22} /></a>
-          <a href="https://leetcode.com/u/chris-h-edmond/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode"><LeetCodeIcon size={22} /></a>
-          <a href="#" aria-label="Share"><Share2 size={22} /></a>
-        </div>
-      </div>
-    </header>
+      </header>
+      <Toast visible={toastVisible} />
+    </>
   );
 };
 
