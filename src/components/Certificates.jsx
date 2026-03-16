@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Award } from 'lucide-react';
+import FallingBeams from './FallingBeams';
 
 const certs = [
   {
@@ -68,39 +69,42 @@ const Certificates = () => {
   };
 
   return (
-    <section className="section container" id="certificates">
-      <h2 className="section-title">Certificates</h2>
-      <div className="cert-grid">
-        {certs.map((cert, i) => (
-          <div
-            className={`cert-card${flippedIndex === i ? ' flipped' : ''}`}
-            key={i}
-            onClick={() => handleFlip(i)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleFlip(i)}
-            aria-label={`${cert.course} certificate by ${cert.issuer}`}
-          >
-            <div className="cert-inner">
-              {/* FRONT */}
-              <div className="cert-face cert-front">
-                <span className="cert-badge">
-                  <Award size={14} />
-                </span>
-                <p className="cert-issuer">{cert.issuer}</p>
-                <h3 className="cert-course">{cert.course}</h3>
-                <span className="cert-hint">Tap to flip ↻</span>
-              </div>
+    <section className="section relative overflow-hidden" id="certificates">
+      <FallingBeams />
+      <div className="container relative z-10">
+        <h2 className="section-title">Certificates</h2>
+        <div className="cert-grid">
+          {certs.map((cert, i) => (
+            <div
+              className={`cert-card${flippedIndex === i ? ' flipped' : ''}`}
+              key={i}
+              onClick={() => handleFlip(i)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && handleFlip(i)}
+              aria-label={`${cert.course} certificate by ${cert.issuer}`}
+            >
+              <div className="cert-inner">
+                {/* FRONT */}
+                <div className="cert-face cert-front">
+                  <span className="cert-badge">
+                    <Award size={14} />
+                  </span>
+                  <p className="cert-issuer">{cert.issuer}</p>
+                  <h3 className="cert-course">{cert.course}</h3>
+                  <span className="cert-hint">Tap to flip ↻</span>
+                </div>
 
-              {/* BACK */}
-              <div className="cert-face cert-back">
-                <span className="cert-date">{cert.issued}</span>
-                <h3 className="cert-course cert-back-title">{cert.course}</h3>
-                <p className="cert-desc">{cert.description}</p>
+                {/* BACK */}
+                <div className="cert-face cert-back">
+                  <span className="cert-date">{cert.issued}</span>
+                  <h3 className="cert-course cert-back-title">{cert.course}</h3>
+                  <p className="cert-desc">{cert.description}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
