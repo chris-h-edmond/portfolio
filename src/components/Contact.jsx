@@ -1,58 +1,86 @@
 import React from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { MeshGradient } from "@paper-design/shaders-react";
+import { Github, Linkedin, Twitter, Mail, ArrowUpRight } from 'lucide-react';
+
+const navLinks = [
+  { label: 'Home', href: '#home' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Certificates', href: '#certificates' },
+  { label: 'Education', href: '#education' },
+  { label: 'Contact', href: '#contact' },
+];
+
+const socialLinks = [
+  { icon: <Github size={18} />, href: 'https://github.com/chris-h-edmond', label: 'GitHub' },
+  { icon: <Linkedin size={18} />, href: 'https://linkedin.com/in/chris-h-edmond', label: 'LinkedIn' },
+  { icon: <Mail size={18} />, href: 'mailto:hello@chrisharris.dev', label: 'Email' },
+];
 
 const Contact = () => {
   return (
-    <footer className="contact-section-wrapper" id="contact">
-      <div className="section container">
-        <h2>Let's build something extraordinary together.</h2>
+    <footer className="contact-footer" id="contact">
+      {/* Shader background — same palette as Hero */}
+      <div className="contact-bg">
+        <MeshGradient
+          className="contact-bg__shader"
+          colors={["#111111", "#5c3317", "#1e2a38", "#2a1810"]}
+          speed={0.6}
+          wireframe={false}
+          backgroundColor="#000000"
+        />
+        <div className="contact-bg__overlay" />
+      </div>
 
-        <div className="contact-grid">
-          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input type="text" id="name" className="form-input" placeholder="Your name" />
+      {/* Glass card — mirrors hero-section card */}
+      <div className="container contact-inner">
+        {/* Top row */}
+        <div className="contact-top">
+          {/* Left: headline + CTA */}
+          <div className="contact-headline-col">
+            <p className="contact-eyebrow">Let's work together</p>
+            <h2 className="contact-headline">Got a project<br />in mind?</h2>
+            <a href="mailto:hello@chrisharris.dev" className="contact-cta-btn">
+              Send a message <ArrowUpRight size={16} />
+            </a>
+          </div>
+
+          {/* Right: nav columns */}
+          <nav className="contact-nav" aria-label="Footer navigation">
+            <div className="contact-nav-col">
+              <span className="contact-nav-heading">Explore</span>
+              <ul>
+                {navLinks.map(link => (
+                  <li key={link.label}>
+                    <a href={link.href} className="contact-nav-link">{link.label}</a>
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input type="email" id="email" className="form-input" placeholder="Your email address" />
+            <div className="contact-nav-col">
+              <span className="contact-nav-heading">Connect</span>
+              <ul>
+                {socialLinks.map(s => (
+                  <li key={s.label}>
+                    <a href={s.href} className="contact-nav-link" target="_blank" rel="noopener noreferrer">
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <div className="form-group">
-              <label htmlFor="message">Message</label>
-              <textarea id="message" className="form-input" placeholder="How can we help each other?"></textarea>
-            </div>
-
-            <button type="submit" className="btn btn-submit">Send Message</button>
-          </form>
-
-          <aside className="contact-info">
-            <div className="info-item">
-              <div className="info-icon"><Mail size={20} /></div>
-              <div className="info-details">
-                <h4>Email</h4>
-                <p>hello@chrisharris.dev</p>
-              </div>
-            </div>
-
-            <div className="info-item">
-              <div className="info-icon"><Phone size={20} /></div>
-              <div className="info-details">
-                <h4>Phone</h4>
-                <p>+1 (555) 123-4567</p>
-              </div>
-            </div>
-
-            <div className="info-item">
-              <div className="info-icon"><MapPin size={20} /></div>
-              <div className="info-details">
-                <h4>Location</h4>
-                <p>New York, NY</p>
-              </div>
-            </div>
-          </aside>
+          </nav>
         </div>
+
+        {/* Divider */}
+        <div className="contact-divider" />
+
+
+      </div>
+
+      {/* Large watermark text — Crawford-style */}
+      <div className="contact-watermark" aria-hidden="true">
+        Chris&nbsp;H&nbsp;Edmond
       </div>
     </footer>
   );

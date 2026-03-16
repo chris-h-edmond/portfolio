@@ -8,7 +8,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
  *   delay  – CSS transition-delay string, e.g. '0.1s' (default: '0s')
  *   y      – starting vertical offset in px (default: 40)
  */
-const ScrollReveal = ({ children, delay = '0s', y = 40 }) => {
+const ScrollReveal = ({ children, delay = '0s', y = 40, style = {} }) => {
   const [ref, visible] = useScrollReveal();
 
   return (
@@ -19,6 +19,7 @@ const ScrollReveal = ({ children, delay = '0s', y = 40 }) => {
         transform: visible ? 'translateY(0)' : `translateY(${y}px)`,
         transition: `opacity 0.7s ease ${delay}, transform 0.7s ease ${delay}`,
         willChange: 'opacity, transform',
+        ...style,
       }}
     >
       {children}

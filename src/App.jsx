@@ -32,7 +32,7 @@ function App() {
             <Education />
           </ScrollReveal>
         </main>
-        <ScrollReveal delay="0.05s">
+        <ScrollReveal delay="0.05s" style={{ marginTop: '4rem' }}>
           <Contact />
         </ScrollReveal>
       </div>
