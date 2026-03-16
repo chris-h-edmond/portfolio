@@ -2,6 +2,8 @@ import React from 'react';
 import { MeshGradient } from "@paper-design/shaders-react";
 import { Github, Linkedin, Twitter, Mail, ArrowUpRight } from 'lucide-react';
 
+const email = "chrisharrisedmond@gmail.com"
+
 const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'Experience', href: '#experience' },
@@ -14,7 +16,7 @@ const navLinks = [
 const socialLinks = [
   { icon: <Github size={18} />, href: 'https://github.com/chris-h-edmond', label: 'GitHub' },
   { icon: <Linkedin size={18} />, href: 'https://linkedin.com/in/chris-h-edmond', label: 'LinkedIn' },
-  { icon: <Mail size={18} />, href: 'mailto:hello@chrisharris.dev', label: 'Email' },
+  { icon: <Mail size={18} />, href: `mailto:${email}`, label: 'Email' },
 ];
 
 const Contact = () => {
@@ -40,7 +42,7 @@ const Contact = () => {
           <div className="contact-headline-col">
             <p className="contact-eyebrow">Let's work together</p>
             <h2 className="contact-headline">Got a project<br />in mind?</h2>
-            <a href="mailto:hello@chrisharris.dev" className="contact-cta-btn">
+            <a href={`mailto:${email}`} className="contact-cta-btn">
               Send a message <ArrowUpRight size={16} />
             </a>
           </div>
