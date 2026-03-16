@@ -7,6 +7,7 @@ import Projects from './components/Projects';
 import Certificates from './components/Certificates';
 import Education from './components/Education';
 import Contact from './components/Contact';
+import ScrollReveal from './components/ScrollReveal';
 
 import './App.css';
 
@@ -18,12 +19,22 @@ function App() {
         <Header />
         <main>
           <Hero />
-          <Experience />
-          <Projects />
-          <Certificates />
-          <Education />
+          <ScrollReveal delay="0s">
+            <Experience />
+          </ScrollReveal>
+          <ScrollReveal delay="0.05s">
+            <Projects />
+          </ScrollReveal>
+          <ScrollReveal delay="0.05s">
+            <Certificates />
+          </ScrollReveal>
+          <ScrollReveal delay="0.05s">
+            <Education />
+          </ScrollReveal>
         </main>
-        <Contact />
+        <ScrollReveal delay="0.05s">
+          <Contact />
+        </ScrollReveal>
       </div>
     </div>
   );
