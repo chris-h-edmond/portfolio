@@ -242,7 +242,8 @@
   position: relative;
   z-index: 1;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.05); /* Subtle default border color shown in the 1.5px margin */
+  background-color: rgba(255, 255, 255, 0.05);
+  /* Subtle default border color shown in the 1.5px margin */
   padding: 1.5rem 2rem;
   border-radius: var(--radius-global);
   box-shadow: var(--shadow-soft);
@@ -261,7 +262,8 @@
 .timeline-content::before {
   content: "";
   position: absolute;
-  inset: -100%; /* Large enough to rotate safely */
+  inset: -100%;
+  /* Large enough to rotate safely */
   background: conic-gradient(from 0deg, transparent 75%, #f97316 100%);
   z-index: -2;
   opacity: 0;
@@ -279,8 +281,13 @@
 }
 
 @keyframes borderAnim {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .timeline-content h3 {
@@ -315,7 +322,8 @@
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   display: flex;
   flex-direction: column;
-  padding: 1.5px; /* The orange border gap */
+  padding: 1.5px;
+  /* The orange border gap */
 }
 
 .project-card::after {
@@ -330,7 +338,8 @@
 .project-card::before {
   content: "";
   position: absolute;
-  inset: -100%; /* Large enough to rotate safely */
+  inset: -100%;
+  /* Large enough to rotate safely */
   background: conic-gradient(from 0deg, transparent 75%, #f97316 100%);
   z-index: -2;
   opacity: 0;
