@@ -1,13 +1,13 @@
 import React from 'react';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-import Hero from './components/Hero';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
-import Certificates from './components/Certificates';
-import Education from './components/Education';
-import Contact from './components/Contact';
-import ScrollReveal from './components/ScrollReveal';
+import Header from './components/layout/Header';
+import Sidebar from './components/layout/Sidebar';
+import Hero from './components/sections/Hero';
+import Experience from './components/sections/Experience';
+import Projects from './components/sections/Projects';
+import Certificates from './components/sections/Certificates';
+import Education from './components/sections/Education';
+import Contact from './components/sections/Contact';
+import ScrollReveal from './components/animations/ScrollReveal';
 
 import './App.css';
 

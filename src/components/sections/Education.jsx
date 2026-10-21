@@ -1,6 +1,6 @@
 import React from 'react';
 import { GraduationCap, Award } from 'lucide-react';
-import FlyingDots from './FlyingDots';
+import FlyingDots from '../animations/FlyingDots';
 
 const Education = () => {
   return (

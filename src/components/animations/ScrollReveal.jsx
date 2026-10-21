@@ -1,5 +1,5 @@
 import React from 'react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 /**
  * Wraps any child with a scroll-triggered fade + slide-up reveal.

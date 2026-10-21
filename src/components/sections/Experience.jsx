@@ -1,6 +1,6 @@
 import React from 'react';
 import { Briefcase, Code } from 'lucide-react';
-import FallingBeams from './FallingBeams';
+import FallingBeams from '../animations/FallingBeams';
 
 const Experience = () => {
   return (

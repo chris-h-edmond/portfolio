@@ -1,5 +1,5 @@
 import React from 'react';
-import FlyingDots from './FlyingDots';
+import FlyingDots from '../animations/FlyingDots';
 
 const PROJECTS_DATA = [
   {
